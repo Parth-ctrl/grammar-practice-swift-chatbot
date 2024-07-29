@@ -273,6 +273,7 @@ export class SwiftchatMessageService extends MessageService {
   // }
 
   async startQuiz(from: string, topic: string, difficulty: string) {
+    console.log("Quiz started");
     await this.userService.updateUserProgress(topic);
     // await this.sendNextQues(from);
   }

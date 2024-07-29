@@ -23,7 +23,18 @@ export class ChatbotService {
     const { from, button_response, text } = body;
     console.log('button response:', button_response);
     let botID = process.env.BOT_ID;
-    const userData = await this.userService.findUserByMobileNumber(from);
+    let userData = await this.userService.findUserByMobileNumber(from, botID);
+    if(!userData){
+      console.log("User not found")
+      userData = await this.userService.createUser(
+        from,
+        'english',
+        process.env.BOT_ID,
+      );
+      console.log("NEW user created");
+      
+    }
+
     // const { intent, entities } = this.intentClassifier.getIntent(text.body);
     if (userData.language === 'english' || userData.language === 'hindi') {
       await this.userService.saveUser(userData);
@@ -40,6 +51,8 @@ export class ChatbotService {
           'Passive Voice',
           button_response.body,
         );
+        
+        // await this.userService.updateUserProgress(from)
       }
       return 'ok';
     }

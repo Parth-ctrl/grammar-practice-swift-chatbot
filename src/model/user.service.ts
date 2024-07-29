@@ -14,7 +14,7 @@ export class UserService {
     language: string,
     botID: string,
   ): Promise<User> {
-    const existingUser = await this.findUserByMobileNumber(mobileNumber);
+    const existingUser = await this.findUserByMobileNumber(mobileNumber,  botID,);
     if (existingUser) {
       existingUser.language = language;
       return this.userRepository.save(existingUser);
@@ -29,8 +29,9 @@ export class UserService {
 
   async findUserByMobileNumber(
     mobileNumber: string,
+    botID:string
   ): Promise<User | undefined> {
-    return this.userRepository.findOne({ where: { mobileNumber } });
+    return this.userRepository.findOne({ where: { mobileNumber, botID } });
   }
 
   async saveUser(user: User): Promise<User | undefined> {
@@ -46,9 +47,9 @@ export class UserService {
   //   return this.userRepository.findOne({ where: { mobileNumber } });
   // }
 
-  // async saveUSerProgress(user: User): Promise<User | undefined> {
-  //   return this.userRepository.save(user);
-  // }
+  async saveUSerProgress(user: User): Promise<User | undefined> {
+    return this.userRepository.save(user);
+  }
 
   // async resetUserProgress(mobileNumber: string): Promise<void> {
   //   const user = await this.findUserByMobileNumber(mobileNumber);
@@ -61,13 +62,13 @@ export class UserService {
   // }
 
   // New Code
-  async getUserProgress(mobileNumber: string): Promise<User> {
-    const user = await this.findUserByMobileNumber(mobileNumber);
-    if (!user) {
-      throw new Error('User not found');
-    }
-    return user;
-  }
+  // async getUserProgress(mobileNumber: string): Promise<User> {
+  //   const user = await this.findUserByMobileNumber(mobileNumber);
+  //   if (!user) {
+  //     throw new Error('User not found');
+  //   }
+  //   return user;
+  // }
 
   // async updateUserProgress(
   //   mobileNumber: string,
@@ -85,7 +86,7 @@ export class UserService {
   //   user.currentquesindex = currentquesindex;
   //   return this.userRepository.save(user);
   // }
-  async updateUserProgress(topic: string) {
+  async updateUserProgress(from: string) {
     console.log('funcn called');
     // const user = await this.findUserByMobileNumber(mobileNumber);
     // if (!user) {
